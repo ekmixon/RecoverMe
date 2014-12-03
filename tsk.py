@@ -50,15 +50,21 @@ def dirWalk():
         return False
         
     data = {}
+    excludeChars = ':*'
     for line in result.split('\r\n'):
+        dontPost = False
         if not line.startswith('r/r'):
             continue
         try:
             inode = findall('r/r (.*?):', line)[0]
             path = findall('r/r.*?:(.*)', line)[0].strip()
+            for char in excludeChars:
+                if char in path:
+                    dontPost = True
         except IndexError:
             continue 
-        else:
+        
+        if not dontPost:
             data[inode] = path
     
     print '\tOk, I got\'s me some data. YAH'
@@ -93,4 +99,3 @@ if __name__ == '__main__':
             recreateDirStruct()
         count += 1
     print 'And ...... we are done here.'
-
