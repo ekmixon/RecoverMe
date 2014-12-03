@@ -61,6 +61,7 @@ def dirWalk():
             for char in excludeChars:
                 if char in path:
                     dontPost = True
+                    continue
         except IndexError:
             continue 
         
