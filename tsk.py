@@ -18,8 +18,10 @@ from sys import exit
 MMLS_TOOL = 'mmls.exe'          #location of mmls.exe
 FLS_TOOL = 'fls.exe'            #location of fls.exe
 ICAT_TOOL = 'icat.exe'          #location of icat.exe
+
 DRIVE = r'\\.\PhysicalDrive0'   #PhyiscalDrive of analysis
 OUTPUT_DIR = r'd:\test'         #Where to copy all the files to
+DELETEDFILES_ONLY = False       #Set this flag if you only want to recover deleted files
 #####################[ DONT EDIT BELOW HERE ]################################
 
 def getOffset():
@@ -43,8 +45,12 @@ def getOffset():
 
 def dirWalk():
     print '\nTrying to access %s' %partitionName
+    cmdOptions = '-F -r'
+    
+    if DELETEDFILES_ONLY:
+        cmdOptions += ' -d'
     try:
-        result = subprocess.check_output('%s -o%d -F -r %s' %(FLS_TOOL, offset, DRIVE))
+        result = subprocess.check_output('%s -o%d %s %s' %(FLS_TOOL, offset, cmdOptions, DRIVE))
     except subprocess.CalledProcessError:
         print '\tWell, I guess there isn\'t crap we care about on that one.'
         return False
@@ -56,8 +62,8 @@ def dirWalk():
         if not line.startswith('r/r'):
             continue
         try:
-            inode = findall('r/r (.*?):', line)[0]
-            path = findall('r/r.*?:(.*)', line)[0].strip()
+            inode = findall('(\d.*?):', line)[0].split('(realloc)')[0]
+            path = findall(':(.*)', line)[0].strip()
             for char in excludeChars:
                 if char in path:
                     dontPost = True
