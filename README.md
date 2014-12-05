@@ -6,5 +6,5 @@ Uses TSK tools to pull files from a computer.  This was made for two purposes.  
 I originally added threading but do to trying to use it on bad drives I decided that simultaneous read/writes were probably not the best.  So it is slow, but it is the best thing out there for the job.  
 
 Requirements
-============
+------------
 You will need TSK, you can get that here http://sourceforge.net/projects/sleuthkit/files/sleuthkit/4.1.3/sleuthkit-4.1.3-win32.zip/download .  I built this for Windows, but after reviewing the code, I believe it is cross platform.
