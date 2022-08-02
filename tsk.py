@@ -97,12 +97,8 @@ def recreateDirStruct():
 
 if __name__ == '__main__':
     offsets = getOffset()
-    count = 1
-    
-    for offset in offsets:
+    for count, offset in enumerate(offsets, start=1):
         partitionName = 'partition%d' %count
-        data = dirWalk()
-        if data:
+        if data := dirWalk():
             recreateDirStruct()
-        count += 1
-    print 'And ...... we are done here.'
+    offsets = getOffset()
